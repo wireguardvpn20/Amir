@@ -1,0 +1,508 @@
+<?php
+$usernamebot = "Dihakssbot";// ایدی ربات بدون @ 
+$channel = "Star_sourcee"; // ایدی کانال بدون @
+$dev='370477581';/// ایدی عددی ادمین 
+$token='0000';
+flush;
+ini_set('error_logs','off');
+date_default_timezone_set('Asia/Tehran');
+define('DEVELOPER',$dev);
+define('API_KEY',$token);
+$bot_id=json_decode(file_get_contents('https://api.telegram.org/bot'.API_KEY.'/getMe'))->result->id;
+define('ROBOT_ID',$bot_id);
+$bot_name=json_decode(file_get_contents('https://api.telegram.org/bot'.API_KEY.'/getMe'))->result->first_name;
+#functions
+function bot($method,$datas=[]){
+	$ch=curl_init();
+	curl_setopt($ch,CURLOPT_URL,'https://api.telegram.org/bot'.API_KEY.'/'.$method);
+	curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+	curl_setopt($ch,CURLOPT_POSTFIELDS,$datas);
+	return json_decode(curl_exec($ch));
+}
+function sendMessage($chat_id,$text,$parse_mode,$reply_markup,$reply_to_message_id){
+	bot('sendMessage',[
+	'chat_id'=>$chat_id,
+	'text'=>$text,
+	'parse_mode'=>$parse_mode,
+	'disable_web_page_preview'=>true,
+	'reply_markup'=>$reply_markup,
+	'reply_to_message_id'=>$reply_to_message_id
+	]);
+}
+function editMessageText($chat_id,$message_id,$text,$parse_mode,$reply_markup){
+	bot('editMessageText',[
+	'chat_id'=>$chat_id,
+	'message_id'=>$message_id,
+	'text'=>$text,
+	'parse_mode'=>$parse_mode,
+	'disable_web_page_preview'=>true,
+	'reply_markup'=>$reply_markup
+	]);
+}
+function editMessageReplyMarkup($chat_id,$message_id,$reply_markup){
+	bot('editMessageReplyMarkup',[
+	'chat_id'=>$chat_id,
+	'message_id'=>$message_id,
+	'reply_markup'=>$reply_markup
+	]);
+}
+function deleteMessage($chat_id,$message_id){
+	bot('deleteMessage',[
+	'chat_id'=>$chat_id,
+	'message_id'=>$message_id
+	]);
+}
+function kickChatMember($chat_id,$user_id){
+	Bot('kickChatMember',[
+	'chat_id'=>$chat_id,
+	'user_id'=>$user_id
+	]);
+}
+function answerCallbackQuery($text,$show_alert){
+	bot('answerCallbackQuery',[
+	'callback_query_id'=>json_decode(file_get_contents('php://input'))->callback_query->id,
+	'text'=>$text,
+	'show_alert'=>$show_alert
+	]);
+}
+function getChat($chat_id){
+	return json_decode(file_get_contents("https://api.telegram.org/bot".API_KEY."/getChat?chat_id=$chat_id"));
+}
+function leaveChat($chat_id){
+	bot('leaveChat',[
+	'chat_id'=>$chat_id
+	]);
+}
+function textToEnglish($text){
+	switch($text){
+		case 'استیکر';
+		$new_text='sticker';
+		break;
+		case 'عکس';
+		$new_text='photo';
+		break;
+		case 'گیف';
+		$new_text='gif';
+		break;
+		case 'فیلم';
+		$new_text='video';
+		break;
+		case 'ویدیوسلفی';
+		$new_text='videoselfi';
+		break;
+		case 'صدا';
+		$new_text='voice';
+		break;
+		case 'موزیک';
+		$new_text='music';
+		break;
+		case 'فایل';
+		$new_text='document';
+		break;
+		case 'مخاطب';
+		$new_text='contact';
+		break;
+		case 'مکان';
+		$new_text='location';
+		break;
+		case 'بازی';
+		$new_text='game';
+		break;
+		case 'متن';
+		$new_text='text';
+		break;
+		case 'لینک';
+		$new_text='link';
+		break;
+		case 'یوزرنیم';
+		$new_text='username';
+		break;
+		case 'هشتگ';
+		$new_text='hashtag';
+		break;
+		case 'بولد';
+		$new_text='bold';
+		break;
+		case 'ایتالیک';
+		$new_text='italic';
+		break;
+		case 'کدینگ';
+		$new_text='coding';
+		break;
+		case 'فوروارد';
+		$new_text='forward';
+		break;
+		case 'سرویس';
+		$new_text='tgservice';
+		break;
+		case 'ریپلای';
+		$new_text='reply';
+		break;
+		case 'کپشن';
+		$new_text='caption';
+		break;
+		case 'ربات';
+		$new_text='bot';
+		break;
+		case 'عضویت';
+		$new_text='join';
+	}
+	return $new_text;
+}
+function textToPersian($text){
+	switch($text){
+		case 'sticker';
+		$new_text='استیکر';
+		break;
+		case 'photo';
+		$new_text='عکس';
+		break;
+		case 'gif';
+		$new_text='گیف';
+		break;
+		case 'video';
+		$new_text='فیلم';
+		break;
+		case 'videoselfi';
+		$new_text='ویدیوسلفی';
+		break;
+		case 'voice';
+		$new_text='صدا';
+		break;
+		case 'music';
+		$new_text='موزیک';
+		break;
+		case 'document';
+		$new_text='فایل';
+		break;
+		case 'contact';
+		$new_text='مخاطب';
+		break;
+		case 'location';
+		$new_text='مکان';
+		break;
+		case 'game';
+		$new_text='بازی';
+		break;
+		case 'text';
+		$new_text='متن';
+		break;
+		case 'link';
+		$new_text='لینک';
+		break;
+		case 'username';
+		$new_text='یوزرنیم';
+		break;
+		case 'hashtag';
+		$new_text='هشتگ';
+		break;
+		case 'bold';
+		$new_text='بولد';
+		break;
+		case 'italic';
+		$new_text='ایتالیک';
+		break;
+		case 'coding';
+		$new_text='کدینگ';
+		break;
+		case 'forward';
+		$new_text='فوروارد';
+		break;
+		case 'tgservice';
+		$new_text='سرویس';
+		break;
+		case 'reply';
+		$new_text='ریپلای';
+		break;
+		case 'caption';
+		$new_text='کپشن';
+		break;
+		case 'bot';
+		$new_text='ربات';
+		break;
+		case 'join';
+		$new_text='عضویت';
+	}
+	return $new_text;
+}
+function saveJson($file,$date){
+	$new_data=json_encode($date);
+	file_put_contents($file,$new_data);
+}
+function chat_id(){
+	$update=json_decode(file_get_contents('php://input'));
+	$chatid=$update->message->chat->id;
+	$chatid2=$update->callback_query->message->chat->id;
+	return $chat_id=$chatid2?$chatid2:$chatid;
+}
+function from_id(){
+	$update=json_decode(file_get_contents('php://input'));
+	$fromid=$update->message->from->id;
+	$fromid2=$update->callback_query->from->id;
+	return $from_id=$fromid2?$fromid2:$fromid;
+}
+function situation($user_id){
+	$update=json_decode(file_get_contents('php://input'));
+	$n=$update->message->chat->type;
+	$n2=$update->callback_query->message->chat->type;
+	if($n!=null){
+		$tc=$update->message->chat->type;
+	}
+	elseif($n2!=null){
+		$tc=$update->callback_query->message->chat->type;
+	}
+	$chat_id=chat_id();
+	$oders=json_decode(file_get_contents("data/groups/".$chat_id."/oders.json"),true);
+	$status=json_decode(file_get_contents("https://api.telegram.org/bot".API_KEY."/getChatMember?chat_id=".$chat_id."&user_id=".$user_id))->result->status;
+	$bot_status=json_decode(file_get_contents("https://api.telegram.org/bot".API_KEY."/getChatMember?chat_id=".$chat_id."&user_id=".ROBOT_ID))->result->status;
+	if($tc=='supergroup' && $oders['نصب']=='✅'){
+		if($status!='member' && $status!=null && $bot_status!='memebr' && $bot_status!=null){
+			return 'ok';
+		}
+	}
+}
+function situationFilters($user_id){
+	$update=json_decode(file_get_contents('php://input'));
+	$tc=$update->message->chat->type;
+	$chat_id=chat_id();
+	$oders=json_decode(file_get_contents("data/groups/".$chat_id."/oders.json"),true);
+	$status=json_decode(file_get_contents("https://api.telegram.org/bot".API_KEY."/getChatMember?chat_id=$chat_id&user_id=".$user_id))->result->status;
+	$bot_status=json_decode(file_get_contents("https://api.telegram.org/bot".API_KEY."/getChatMember?chat_id=$chat_id&user_id=".$bot_id))->result->status;
+	if($tc=='supergroup' && $oders['نصب']=='✅'){
+		if($status=='member'){
+			return 'ok';
+		}
+	}
+}
+function filterCmd($text){
+	if(strstr($text,'/')){
+		while(strstr($text,'/')){
+			$text=str_replace('/','',$text);
+		}
+	}
+	if(strstr($text,'!')){
+		while(strstr($text,'!')){
+			$text=str_replace('!','',$text);
+		}
+	}
+	if(strstr($text,'#')){
+		while(strstr($text,'#')){
+			$text=str_replace('#','',$text);
+		}
+	}
+	if(preg_match('/^[A-Z]/',$text)){
+		$text=strtolower($text);
+	}
+	return $text;
+}
+function buttonPanel($language){
+	if($language!='english'){
+		return json_encode(['resize_keyboard'=>true,'inline_keyboard'=>[
+		[['text'=>"تنظیمات گروه |⚙️",'callback_data'=>"settings_group"],['text'=>"🎚| تنظیمات اد اجباری",'callback_data'=>"settings_compulsory_add"]],
+		[['text'=>"تنظیمات عضویت اجباری |💡",'callback_data'=>"settings_compulsory_join"],['text'=>"⛓| تنظیمات پیام مکرر",'callback_data'=>"settings_frequent_message"]],
+		[['text'=>"تنظیمات محدودیت کاراکتر |🔩",'callback_data'=>"settings_character_constraint"],['text'=>"⏳| تنظیمات سکوت",'callback_data'=>"settings_silent"]],
+		[['text'=>"📋| راهنمای دستورات",'callback_data'=>"cmd_guide"]],
+		[['text'=>"🖱| خروج |🖱",'callback_data'=>"exit"]]
+		]]);
+	}else{
+		return json_encode(['resize_keyboard'=>true,'inline_keyboard'=>[
+		[['text'=>"Settings group |⚙️",'callback_data'=>"settings_group"],['text'=>"🎚| Settings compulsory add",'callback_data'=>"settings_compulsory_add"]],
+		[['text'=>"Settings compulsory join |💡",'callback_data'=>"settings_compulsory_join"],['text'=>"⛓| Settings frequent message",'callback_data'=>"settings_frequent_message"]],
+		[['text'=>"Settings character constraint |🔩",'callback_data'=>"settings_character_constraint"],['text'=>"⏳| Settings silent",'callback_data'=>"settings_silent"]],
+		[['text'=>"📋| Commands Guide",'callback_data'=>"cmd_guide"]],
+		[['text'=>"🖱| Exit |🖱",'callback_data'=>"exit"]]
+		]]);
+	}
+}
+function buttonPanelMulti($file){
+	$chat_id=chat_id();
+	$number= -1;
+	$list=array();
+	foreach($file as $key=>$value){
+		$number=$number + 1;
+		$groups=json_decode(file_get_contents('data/bot/groups.json'),true);
+		if($groups[$chat_id]!='english'){
+			$key2=textToPersian($key);
+			$list[$number]=array(array('text'=>"$value",'callback_data'=>"multi_$key"),array('text'=>"$key2",'callback_data'=>"none"));
+		}else{
+			$list[$number]=array(array('text'=>"$key",'callback_data'=>"none"),array('text'=>"$value",'callback_data'=>"multi_$key"));
+		}
+	}
+	if($groups[$chat_id]!='english'){
+		$list[]=array(array('text'=>"خانه 🏛",'callback_data'=>"managemant_group"));
+	}else{
+		$list[]=array(array('text'=>"Back 🏛",'callback_data'=>"managemant_group"));
+	}
+	return json_encode(array('resize_keyboard'=>true,'inline_keyboard'=>$list));
+}
+function buttonCompulsoryadd($oders){
+	$chat_id=chat_id();
+	$groups=json_decode(file_get_contents('data/bot/groups.json'),true);
+	if($groups[$chat_id]!='english'){
+		if($oders['compulsory_add']=='✅'){
+			return json_encode(['resize_keyboard'=>true,'inline_keyboard'=>[
+			[['text'=>"$oders[compulsory_add]",'callback_data'=>"compulsory_add"],['text'=>"🔑| اد اجباری",'callback_data'=>"none"]],
+			[['text'=>"$oders[statistics_compulsory_add]",'callback_data'=>"none"],['text'=>"🗄| آمار اد",'callback_data'=>"none"]],
+			[['text'=>"$oders[number_compulsory_add]",'callback_data'=>"none"],['text'=>"📰| تعداد اد",'callback_data'=>"none"]],
+			[['text'=>"➕",'callback_data'=>"c_add+"],['text'=>"➖",'callback_data'=>"c_add-"]],
+			[['text'=>"خانه 🏛",'callback_data'=>"managemant_group"]]
+			]]);
+		}else{
+			return json_encode(['resize_keyboard'=>true,'inline_keyboard'=>[
+			[['text'=>"$oders[compulsory_add]",'callback_data'=>"compulsory_add"],['text'=>"🔑| اد اجباری",'callback_data'=>"none"]],
+			[['text'=>"$oders[statistics_compulsory_add]",'callback_data'=>"none"],['text'=>"🗄| آمار اد",'callback_data'=>"none"]],
+			[['text'=>"خانه 🏛",'callback_data'=>"managemant_group"]]
+			]]);
+		}
+	}else{
+		if($oders['compulsory_add']=='✅'){
+			return json_encode(['resize_keyboard'=>true,'inline_keyboard'=>[
+			[['text'=>"📰| Compulsory add",'callback_data'=>"none"],['text'=>"$oders[compulsory_add]",'callback_data'=>"compulsory_add"]],
+			[['text'=>"🗄| Statistics add",'callback_data'=>"none"],['text'=>"$oders[statistics_compulsory_add]",'callback_data'=>"none"]],
+			[['text'=>"📰| Number add",'callback_data'=>"none"],['text'=>"$oders[number_compulsory_add]",'callback_data'=>"none"]],
+			[['text'=>"➖",'callback_data'=>"c_add-"],['text'=>"➕",'callback_data'=>"c_add+"]],
+			[['text'=>"Back 🏛",'callback_data'=>"managemant_group"]]
+			]]);
+		}else{
+			return json_encode(['resize_keyboard'=>true,'inline_keyboard'=>[
+			[['text'=>"🔑| Compulsory add",'callback_data'=>"none"],['text'=>"$oders[compulsory_add]",'callback_data'=>"compulsory_add"]],
+			[['text'=>"🗄| Statistics add",'callback_data'=>"none"],['text'=>"$oders[statistics_compulsory_add]",'callback_data'=>"none"]],
+			[['text'=>"Back 🏛",'callback_data'=>"managemant_group"]]
+			]]);
+		}
+	}
+}
+function buttonCompulsoryJoin($oders){
+	$chat_id=chat_id();
+	$groups=json_decode(file_get_contents('data/bot/groups.json'),true);
+	if($groups[$chat_id]!='english'){
+		if($oders['channel_compulsory_join']=='No set'){
+			$oders['channel_compulsory_join']='تنظیم نشده';
+		}
+		return json_encode(['resize_keyboard'=>true,'inline_keyboard'=>[
+		[['text'=>"$oders[compulsory_join]",'callback_data'=>"compulsory_join"],['text'=>"📦| عضویت اجباری",'callback_data'=>"none"]],
+		[['text'=>"$oders[channel_compulsory_join]",'callback_data'=>"none"],['text'=>"🏷| کانال عضویت",'callback_data'=>"none"]],
+		[['text'=>"حذف کانال",'callback_data'=>"delete_channel_c_join"],['text'=>"📮| تنظیم کانال",'callback_data'=>"set_channel_c_join"]],
+		[['text'=>"خانه 🏛",'callback_data'=>"managemant_group"]]
+		]]);
+	}else{
+		return json_encode(['resize_keyboard'=>true,'inline_keyboard'=>[
+		[['text'=>"📦| Compulsory join",'callback_data'=>"none"],['text'=>"$oders[compulsory_join]",'callback_data'=>"compulsory_join"]],
+		[['text'=>"🏷| Channel join",'callback_data'=>"none"],['text'=>"$oders[channel_compulsory_join]",'callback_data'=>"none"]],
+		[['text'=>"📮| Set channel",'callback_data'=>"set_channel_c_join"],['text'=>"Delete channel",'callback_data'=>"delete_channel_c_join"]],
+		[['text'=>"Back 🏛",'callback_data'=>"managemant_group"]]
+		]]);
+	}
+}
+function cancelCompulsoryJoin(){
+	$chatid=chat_id();
+	$groups=json_decode(file_get_contents('data/bot/groups.json'),true);
+	if($groups[$chatid]!='english'){
+		return json_encode(['resize_keyboard'=>true,'inline_keyboard'=>[
+		[['text'=>"لغو❌",'callback_data'=>"chancel_compulsory_join"]]
+		]]);
+	}else{
+		return json_encode(['resize_keyboard'=>true,'inline_keyboard'=>[
+		[['text'=>"Cancel❌",'callback_data'=>"chancel_compulsory_join"]]
+		]]);
+	}
+}
+function buttonFrequentMessage($oders){
+	$chat_id=chat_id();
+	$groups=json_decode(file_get_contents('data/bot/groups.json'),true);
+	if($groups[$chat_id]!='english'){
+		if($oders['frequent_message']=='✅'){
+			if($oders['reaction_frequent_message']=='Silent user'){
+				$oders['reaction_frequent_message']='سکوت کاربر';
+			}
+			elseif($oders['reaction_frequent_message']=='Kick user'){
+				$oders['reaction_frequent_message']='اخراج کاربر';
+			}
+			return json_encode(['resize_keyboard'=>true,'inline_keyboard'=>[
+			[['text'=>"$oders[frequent_message]",'callback_data'=>"frequent_message"],['text'=>"✉️| پیام مکرر",'callback_data'=>"none"]],
+			[['text'=>"$oders[number_frequent_message]",'callback_data'=>"none"],['text'=>"تعداد مجاز / ثانیه",'callback_data'=>"none"]],
+			[['text'=>"➖",'callback_data'=>"f_message-"],['text'=>"➕",'callback_data'=>"f_message+"]],
+			[['text'=>"$oders[reaction_frequent_message]",'callback_data'=>"reaction_frequent_message"],['text'=>"📜| واکنش",'callback_data'=>"none"]],
+			[['text'=>"خانه 🏛",'callback_data'=>"managemant_group"]]
+			]]);
+		}else{
+			return json_encode(['resize_keyboard'=>true,'inline_keyboard'=>[
+			[['text'=>"$oders[frequent_message]",'callback_data'=>"frequent_message"],['text'=>"✉️| پیام مکرر",'callback_data'=>"none"]],
+			[['text'=>"خانه 🏛",'callback_data'=>"managemant_group"]]
+			]]);
+		}
+	}else{
+		if($oders['frequent_message']=='✅'){
+			return json_encode(['resize_keyboard'=>true,'inline_keyboard'=>[
+			[['text'=>"✉️| Frequent message",'callback_data'=>"none"],['text'=>"$oders[frequent_message]",'callback_data'=>"frequent_message"]],
+			[['text'=>"Number authorized / second",'callback_data'=>"none"],['text'=>"$oders[number_frequent_message]",'callback_data'=>"none"]],
+			[['text'=>"➖",'callback_data'=>"f_message-"],['text'=>"➕",'callback_data'=>"f_message+"]],
+			[['text'=>"📜| Reaction",'callback_data'=>"none"],['text'=>"$oders[reaction_frequent_message]",'callback_data'=>"reaction_frequent_message"]],
+			[['text'=>"Back 🏛",'callback_data'=>"managemant_group"]]
+			]]);
+		}else{
+			return json_encode(['resize_keyboard'=>true,'inline_keyboard'=>[
+			[['text'=>"✉️| Frequent message",'callback_data'=>"none"],['text'=>"$oders[frequent_message]",'callback_data'=>"frequent_message"]],
+			[['text'=>"Back 🏛",'callback_data'=>"managemant_group"]]
+			]]);
+		}
+	}
+}
+function buttonCharacterConstraint($oders){
+	$chat_id=chat_id();
+	$groups=json_decode(file_get_contents('data/bot/groups.json'),true);
+	if($groups[$chat_id]!='english'){
+		if($oders['character_constraint']=='✅'){
+			return json_encode(['resize_keyboard'=>true,'inline_keyboard'=>[
+			[['text'=>"$oders[character_constraint]",'callback_data'=>"character_constraint"],['text'=>"📭| محدودیت کاراکتر",'callback_data'=>"none"]],
+			[['text'=>"$oders[highest_number_character_constraint]",'callback_data'=>"none"],['text'=>"📉| بیشترین تعداد",'callback_data'=>"none"]],
+			[['text'=>"10",'callback_data'=>"high_c_constraint_1-"],['text'=>"➕10",'callback_data'=>"high_c_constraint_1+"]],
+			[['text'=>"100",'callback_data'=>"high_c_constraint_2-"],['text'=>"➕100",'callback_data'=>"high_c_constraint_2+"]],
+			[['text'=>"خانه 🏛",'callback_data'=>"managemant_group"]]
+			]]);
+		}else{
+			return json_encode(['resize_keyboard'=>true,'inline_keyboard'=>[
+			[['text'=>"$oders[character_constraint]",'callback_data'=>"character_constraint"],['text'=>"📭| محدودیت کاراکتر",'callback_data'=>"none"]],
+			[['text'=>"خانه 🏛",'callback_data'=>"managemant_group"]]
+			]]);
+		}
+	}else{
+		if($oders['character_constraint']=='✅'){
+			return json_encode(['resize_keyboard'=>true,'inline_keyboard'=>[
+			[['text'=>"📭| Character constraint",'callback_data'=>"none"],['text'=>"$oders[character_constraint]",'callback_data'=>"character_constraint"]],
+			[['text'=>"📉| Highest number",'callback_data'=>"none"],['text'=>"$oders[highest_number_character_constraint]",'callback_data'=>"none"]],
+			[['text'=>"10",'callback_data'=>"high_c_constraint_1-"],['text'=>"➕10",'callback_data'=>"high_c_constraint_1+"]],
+			[['text'=>"100",'callback_data'=>"high_c_constraint_2-"],['text'=>"➕100",'callback_data'=>"high_c_constraint_2+"]],
+			[['text'=>"Back 🏛",'callback_data'=>"managemant_group"]]
+			]]);
+		}else{
+			return json_encode(['resize_keyboard'=>true,'inline_keyboard'=>[
+			[['text'=>"📭| Character constraint",'callback_data'=>"none"],['text'=>"$oders[character_constraint]",'callback_data'=>"character_constraint"]],
+			[['text'=>"Back 🏛",'callback_data'=>"managemant_group"]]
+			]]);
+		}
+	}
+}
+function buttonSilent($oders){
+	$chat_id=chat_id();
+	$groups=json_decode(file_get_contents('data/bot/groups.json'),true);
+	if($oders['silent_group']=='✅'){
+		if($groups[$chat_id]!='english'){
+			return json_encode(['resize_keyboard'=>true,'inline_keyboard'=>[
+			[['text'=>$oders['silent_group'],'callback_data'=>"silent_group"],['text'=>"🔒| سکوت گروه",'callback_data'=>"none"]],
+			[['text'=>$oders['silent_start'],'callback_data'=>"none"],['text'=>"⏱| از ساعت",'callback_data'=>"none"]],
+			[['text'=>"➖",'callback_data'=>"silent_start-"],['text'=>"➕",'callback_data'=>"silent_start+"]],
+			[['text'=>$oders['silent_stop'],'callback_data'=>"none"],['text'=>"⏱| تا ساعت",'callback_data'=>"none"]],
+			[['text'=>"➖",'callback_data'=>"silent_stop-"],['text'=>"➕",'callback_data'=>"silent_stop+"]],
+			[['text'=>"|🎚 لیست سکوت 🎚|",'callback_data'=>"silent_list"]],
+			[['text'=>"خانه 🏛",'callback_data'=>"managemant_group"]]
+			]]);
+		}else{
+			return json_encode(['resize_keyboard'=>true,'inline_keyboard'=>[
+			[['text'=>"🔒| Silent group",'callback_data'=>"none"],['text'=>$oders['silent_group'],'callback_data'=>"silent_group"]],
+			[['text'=>"⏱| Start time",'callback_data'=>"none"],['text'=>$oders['silent_start'],'callback_data'=>"none"]],
+			[['text'=>"➖",'callback_data'=>"silent_start-"],['text'=>"➕",'callback_data'=>"silent_start+"]],
+			[['text'=>"⏱| End time",'callback_data'=>"none"],['text'=>$oders['silent_stop'],'callback_data'=>"none"]],
+			[['text'=>"➖",'callback_data'=>"silent_stop-"],['text'=>"➕",'callback_data'=>"silent_stop+"]],
+			[['text'=>"🎚| Silent list |🎚",'callback_data'=>"silent_list"]],
+			[['text'=>"Back 🏛",'callback_data'=>"
